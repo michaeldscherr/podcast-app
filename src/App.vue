@@ -32,6 +32,8 @@ export default {
 }
 </script>
 
+<style src="../node_modules/bulma/css/bulma.css"></style>
+
 <style>
 html {
   height: 100%;
