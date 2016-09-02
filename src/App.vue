@@ -5,6 +5,8 @@
     </div>
 </template>
 
+<style src="./styles/main.scss" lang="scss"></style>
+
 <script>
     import Hero from './components/Hero';
     import SearchBar from './components/SearchBar';
