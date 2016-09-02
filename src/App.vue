@@ -2,6 +2,7 @@
     <div id="app">
         <hero></hero>
         <search-bar></search-bar>
+        <library></library>
     </div>
 </template>
 
@@ -10,10 +11,12 @@
 <script>
     import Hero from './components/Hero';
     import SearchBar from './components/SearchBar';
+    import Library from './components/Library';
     export default {
       components: {
         Hero,
-        SearchBar
+        SearchBar,
+        Library
       }
     }
 </script>
