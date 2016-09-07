@@ -19,6 +19,12 @@
                     >
                         {{ title }}
                     </a>
+                    <a
+                        class="button is-info"
+                        @click="clearSearch"
+                    >
+                        Clear Search
+                    </a>
                 </p>
             </div>
             <h4 v-show="results.errorMessage">{{ results.errorMessage }}</h4>
@@ -62,7 +68,12 @@
                         {{ row.releaseDate | moment "MMM DD, YYYY" }}
                     </td>
                     <td class="is-icon">
-                        <a class="button  is-primary">Subscribe</a>
+                        <a
+                            class="button  is-primary"
+                            @click="subscribe(row)"
+                        >
+                            Subscribe
+                        </a>
                     </td>
                 </tr>
             </tbody>
@@ -118,6 +129,17 @@
                 }, (response) => {
                     this.$set('results.errorMessage', 'Sorry, no results found');
                 });
+            },
+            clearSearch() {
+                this.$set('results.errorMessage', '');
+                this.$set('results.data', []);
+                this.$set('query.params.term', '');
+            },
+            subscribe(collectionID) {
+                this.$dispatch('subscribe-to-podcast', collectionID);
+            },
+            unsubscribe(collectionID) {
+                this.$dispatch('unsubscribe-to-podcast', collectionID);
             }
         }
     }
