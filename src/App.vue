@@ -62,11 +62,6 @@
                     throw new Error('Podcast must be of type Object');
                     return;
                 }
-                let {
-                    collectionId: id,
-                    collectionName: name,
-                    feedUrl: feed,
-                } = podcast;
                 const newPodcast = {
                     id: podcast.collectionId,
                     name: podcast.collectionName,
