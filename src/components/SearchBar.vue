@@ -136,10 +136,10 @@
                 this.$set('query.params.term', '');
             },
             subscribe(collectionID) {
-                this.$dispatch('subscribe-to-podcast', collectionID);
+                this.$dispatch('subscribe', collectionID);
             },
             unsubscribe(collectionID) {
-                this.$dispatch('unsubscribe-to-podcast', collectionID);
+                this.$dispatch('unsubscribe', collectionID);
             }
         }
     }

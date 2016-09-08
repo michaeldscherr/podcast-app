@@ -2,7 +2,7 @@
     <div id="app">
         <hero></hero>
         <search-bar></search-bar>
-        <library></library>
+        <library :subscribed-podcasts="subscribedPodcasts"></library>
     </div>
 </template>
 
@@ -20,29 +20,76 @@
         },
         data() {
             return {
-                subscribedPodcasts: [],
+                subscribedPodcasts: [
+                    /*
+                    {
+                        id: 201671138,
+                        name: 'This American Life',
+                        feedURL: 'http://feed.thisamericanlife.org/talpodcast',
+                        episodes: [
+                            {
+                                id: 567,
+                                title: 'What’s Going On In There?'
+                            },
+                            {
+                                id: 595,
+                                title: 'Deep End of the Pool'
+                            }
+                        ]
+                    },
+                    {
+                        id: 917918570,
+                        name: 'Serial',
+                        feedURL: 'http://feeds.serialpodcast.org/serialpodcast',
+                        episodes: [
+                            {
+                                id: 211,
+                                title: 'Present for Duty'
+                            },
+                            {
+                                id: 210,
+                                title: 'Thorny Politics'
+                            }
+                        ]
+                    }
+                    */
+                ],
             }
         },
         events: {
-            'subscribe-to-podcast': function(podcast) {
+            subscribe(podcast) {
+                if (typeof podcast !== 'object') {
+                    throw new Error('Podcast must be of type Object');
+                    return;
+                }
                 let {
                     collectionId: id,
                     collectionName: name,
-                    feedUrl: feed
+                    feedUrl: feed,
                 } = podcast;
-                this.subscribe({ id, name, feed });
+                const newPodcast = {
+                    id: podcast.collectionId,
+                    name: podcast.collectionName,
+                    feed: podcast.feelUrl,
+                    episodes: []
+                };
+                this.subscribedPodcasts.push(newPodcast);
+                this.$broadcast('newSubscription', newPodcast);
             },
-            'unsubscribe-to-podcast': function(index) {
-                this.unsubscribe(index);
+            unsubscribe(id) {
+                if (typeof id !== 'number') {
+                    throw new Error('Index must be of type Number');
+                    return;
+                }
+                this.subscribedPodcasts.forEach((index, podcast) => {
+                    if (podcast.collectionId === id) {
+                        this.subscribedPodcasts.slice(index, 1);
+                    }
+                })
             }
         },
         methods: {
-            subscribe(podcast) {
-                this.subscribedPodcasts.push(podcast);
-            },
-            unsubscribe(index) {
-                this.subscribedPodcasts.slice(index, 1);
-            },
+            //
         },
     }
 </script>

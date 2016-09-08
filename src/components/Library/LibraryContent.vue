@@ -1,9 +1,15 @@
 <template>
     <div class="column">
-        <h3 class="title">
+        <h3 class="title" v-show="activePodcast.name">
             {{ activePodcast.name }}
             <button class="button  is-danger">Unsubscribe</button>
         </h3>
+        <h4
+            class="subtitle"
+            v-if="!activePodcast.episodes.length"
+        >
+            no new episodes at this time. please try again later.
+        </h4>
         <div class="columns  is-multiline">
             <template v-for="episode of activePodcast.episodes" track-by="id">
                 <div class="column  is-one-third">
