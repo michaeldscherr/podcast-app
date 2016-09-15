@@ -26,7 +26,13 @@
 </template>
 
 <script>
+    import globalData from '../../globalData';
     export default {
-        props: ['subscribedPodcasts']
+        data() {
+            return Object.assign(
+                {},
+                globalData
+            )
+        }
     }
 </script>

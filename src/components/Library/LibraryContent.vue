@@ -6,7 +6,7 @@
         </h3>
         <h4
             class="subtitle"
-            v-if="!activePodcast.episodes.length"
+            v-if="!activePodcast.episodes || !activePodcast.episodes.length"
         >
             no new episodes at this time. please try again later.
         </h4>
@@ -42,7 +42,13 @@
 </template>
 
 <script>
+    import globalData from '../../globalData';
     export default {
-        props: ['activePodcast']
+        data() {
+            return Object.assign(
+                {},
+                globalData
+            )
+        }
     }
 </script>
