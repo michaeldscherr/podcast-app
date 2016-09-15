@@ -16,7 +16,6 @@
             LibraryNav,
             LibraryContent
         },
-        props: ['subscribedPodcasts'],
         data() {
             return Object.assign(
                 {},
