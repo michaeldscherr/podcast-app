@@ -10,14 +10,15 @@
 
 <script>
     import globalData from './globalData';
-    import Hero from './components/Hero';
-    import SearchBar from './components/SearchBar';
-    import Library from './components/Library';
+    import Hero from './components/Hero.vue';
+    import SearchBar from './components/SearchBar.vue';
+    import Library from './components/Library.vue';
+
     export default {
         components: {
             Hero,
             SearchBar,
-            Library
+            Library,
         },
         data() {
             return Object.assign(
@@ -27,33 +28,28 @@
         },
         events: {
             subscribe(podcast) {
-                if (typeof podcast !== 'object') {
-                    throw new Error('Podcast must be of type Object');
-                    return;
-                }
+                this.checkPodcastType(podcast);
                 const newPodcast = {
                     id: podcast.collectionId,
                     name: podcast.collectionName,
                     feed: podcast.feelUrl,
-                    episodes: []
+                    episodes: [],
                 };
                 this.subscribedPodcasts.push(newPodcast);
                 this.$broadcast('newSubscription', newPodcast);
             },
-            unsubscribe(id) {
-                if (typeof id !== 'number') {
-                    throw new Error('Index must be of type Number');
-                    return;
-                }
-                this.subscribedPodcasts.forEach((index, podcast) => {
-                    if (podcast.collectionId === id) {
-                        this.subscribedPodcasts.slice(index, 1);
-                    }
-                })
-            }
+            unsubscribe(podcast) {
+                this.checkPodcastType(podcast);
+                this.subscribedPodcasts.$remove(podcast);
+            },
         },
         methods: {
-            //
+            checkPodcastType(podcast) {
+                if (typeof podcast !== 'object') {
+                    throw new Error('Podcast must be of type Object');
+                }
+                return true;
+            },
         },
-    }
+    };
 </script>

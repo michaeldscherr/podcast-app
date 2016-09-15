@@ -27,12 +27,13 @@
 
 <script>
     import globalData from '../../globalData';
+
     export default {
         data() {
             return Object.assign(
                 {},
                 globalData
-            )
-        }
-    }
+            );
+        },
+    };
 </script>

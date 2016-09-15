@@ -95,8 +95,8 @@
                         callback: '',
                         limit: 10,
                         explicit: 'Yes',
-                        lang: 'en_us'
-                    }
+                        lang: 'en_us',
+                    },
                 },
                 title: 'Search',
                 placeholder: 'This American Life',
@@ -106,17 +106,17 @@
                         { key: 'collectionName', label: 'Title' },
                         { key: 'primaryGenreName', label: 'Genre' },
                         { key: 'releaseDate', label: 'Release Date' },
-                        { key: 'feedUrl', label: 'Feed URL' }
+                        { key: 'feedUrl', label: 'Feed URL' },
                     ],
                     data: [],
-                    errorMessage: ''
-                }
-            }
+                    errorMessage: '',
+                },
+            };
         },
         methods: {
             search() {
                 this.$http.jsonp(this.query.uri, {
-                    params: this.query.params
+                    params: this.query.params,
                 })
                 .then((response) => {
                     if (response.data.results.length === 0) {
@@ -126,7 +126,7 @@
                     }
                     this.$set('results.errorMessage', '');
                     this.$set('results.data', response.data.results);
-                }, (response) => {
+                }, () => {
                     this.$set('results.errorMessage', 'Sorry, no results found');
                 });
             },
@@ -138,11 +138,11 @@
             subscribe(collectionID) {
                 this.$dispatch('subscribe', collectionID);
             },
-            unsubscribe(collectionID) {
-                this.$dispatch('unsubscribe', collectionID);
-            }
-        }
-    }
+            unsubscribe(podcast) {
+                this.$dispatch('unsubscribe', podcast);
+            },
+        },
+    };
 </script>
 
 <style lang="scss" scope="local">

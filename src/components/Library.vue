@@ -9,12 +9,13 @@
 
 <script>
     import globalData from '../globalData';
-    import LibraryContent from './Library/LibraryContent';
-    import LibraryNav from './Library/LibraryNav';
+    import LibraryContent from './Library/LibraryContent.vue';
+    import LibraryNav from './Library/LibraryNav.vue';
+
     export default {
         components: {
             LibraryNav,
-            LibraryContent
+            LibraryContent,
         },
         data() {
             return Object.assign(
@@ -25,13 +26,13 @@
         events: {
             newSubscription(podcast) {
                 this.activePodcast = podcast;
-            }
+            },
         },
         ready() {
             //
         },
         methods: {
             //
-        }
-    }
+        },
+    };
 </script>

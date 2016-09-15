@@ -31,9 +31,9 @@
                 pages: [
                     { title: 'Home', uri: '/' },
                     { title: 'Podcasts', uri: '/podcasts' },
-                    { title: 'About', uri: '/about' }
-                ]
-            }
-        }
-    }
+                    { title: 'About', uri: '/about' },
+                ],
+            };
+        },
+    };
 </script>
