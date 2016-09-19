@@ -135,8 +135,8 @@
                 this.$set('results.data', []);
                 this.$set('query.params.term', '');
             },
-            subscribe(collectionID) {
-                this.$dispatch('subscribe', collectionID);
+            subscribe(podcast) {
+                this.$dispatch('subscribe', podcast);
             },
             unsubscribe(podcast) {
                 this.$dispatch('unsubscribe', podcast);

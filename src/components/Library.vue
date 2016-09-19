@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import globalData from '../globalData';
+    import data from '../data';
     import LibraryContent from './Library/LibraryContent.vue';
     import LibraryNav from './Library/LibraryNav.vue';
 
@@ -20,13 +20,8 @@
         data() {
             return Object.assign(
                 {},
-                globalData
+                data
             );
-        },
-        events: {
-            newSubscription(podcast) {
-                this.activePodcast = podcast;
-            },
         },
         ready() {
             //

@@ -1,13 +1,10 @@
-import globalData from './globalData';
-
-const storageKey = globalData.storageKey;
-const dataStringified = JSON.stringify(globalData.data);
+const storageKey = 'scherrcast_data';
 
 export default {
     fetch() {
-        return JSON.parse(window.localStorage.getItem(storageKey) || dataStringified);
+        return JSON.parse(window.localStorage.getItem(storageKey) || '{}');
     },
-    save() {
-        window.localStorage.setItem(storageKey, JSON.stringify(globalData.data));
+    save(data) {
+        window.localStorage.setItem(storageKey, JSON.stringify(data));
     },
 };

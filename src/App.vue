@@ -9,7 +9,6 @@
 <style src="./styles/main.scss" lang="scss"></style>
 
 <script>
-    import globalData from './globalData';
     import store from './store';
     import Hero from './components/Hero.vue';
     import SearchBar from './components/SearchBar.vue';
@@ -21,14 +20,8 @@
             SearchBar,
             Library,
         },
-        data() {
-            return Object.assign(
-                {},
-                globalData
-            );
-        },
         watch: {
-            data: {
+            $data: {
                 deep: true,
                 handler: store.save,
             },
@@ -42,12 +35,12 @@
                     feed: podcast.feedUrl,
                     episodes: [],
                 };
-                this.data.subscribedPodcasts.push(newPodcast);
+                this.subscribedPodcasts.push(newPodcast);
                 this.$broadcast('newSubscription', newPodcast);
             },
             unsubscribe(podcast) {
                 this.checkPodcastType(podcast);
-                this.data.subscribedPodcasts.$remove(podcast);
+                this.subscribedPodcasts.$remove(podcast);
             },
         },
         methods: {

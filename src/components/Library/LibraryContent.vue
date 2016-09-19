@@ -1,17 +1,17 @@
 <template>
     <div class="column">
-        <h3 class="title" v-show="data.activePodcast.name">
-            {{ data.activePodcast.name }}
+        <h3 class="title" v-show="activePodcast.name">
+            {{ activePodcast.name }}
             <button class="button  is-danger">Unsubscribe</button>
         </h3>
         <h4
             class="subtitle"
-            v-if="!data.activePodcast.episodes || !data.activePodcast.episodes.length"
+            v-if="!activePodcast.episodes || !activePodcast.episodes.length"
         >
             no new episodes at this time. please try again later.
         </h4>
         <div class="columns  is-multiline">
-            <template v-for="episode of data.activePodcast.episodes" track-by="id">
+            <template v-for="episode of activePodcast.episodes" track-by="id">
                 <div class="column  is-one-third">
                     <div class="card">
                         <header class="card-header">
@@ -42,14 +42,19 @@
 </template>
 
 <script>
-    import globalData from '../../globalData';
+    import data from '../../data';
 
     export default {
         data() {
             return Object.assign(
                 {},
-                globalData
+                data
             );
+        },
+        events: {
+            newSubscription(podcast) {
+                this.activePodcast = podcast;
+            },
         },
     };
 </script>

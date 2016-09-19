@@ -12,7 +12,7 @@
                 Podcasts
             </p>
             <ul class="menu-list">
-                <li v-for="podcast of data.subscribedPodcasts" track-by="id">
+                <li v-for="podcast of subscribedPodcasts" track-by="id">
                     <a href="#">{{ podcast.name }}</a>
                     <ul v-show="podcast.episodes.length">
                         <li v-for="episode of podcast.episodes">
@@ -26,13 +26,13 @@
 </template>
 
 <script>
-    import globalData from '../../globalData';
+    import data from '../../data';
 
     export default {
         data() {
             return Object.assign(
                 {},
-                globalData
+                data
             );
         },
     };
