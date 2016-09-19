@@ -10,6 +10,7 @@
 
 <script>
     import globalData from './globalData';
+    import store from './store';
     import Hero from './components/Hero.vue';
     import SearchBar from './components/SearchBar.vue';
     import Library from './components/Library.vue';
@@ -23,8 +24,14 @@
         data() {
             return Object.assign(
                 {},
-                globalData,
+                globalData
             );
+        },
+        watch: {
+            data: {
+                deep: true,
+                handler: store.save,
+            },
         },
         events: {
             subscribe(podcast) {
@@ -32,15 +39,15 @@
                 const newPodcast = {
                     id: podcast.collectionId,
                     name: podcast.collectionName,
-                    feed: podcast.feelUrl,
+                    feed: podcast.feedUrl,
                     episodes: [],
                 };
-                this.subscribedPodcasts.push(newPodcast);
+                this.data.subscribedPodcasts.push(newPodcast);
                 this.$broadcast('newSubscription', newPodcast);
             },
             unsubscribe(podcast) {
                 this.checkPodcastType(podcast);
-                this.subscribedPodcasts.$remove(podcast);
+                this.data.subscribedPodcasts.$remove(podcast);
             },
         },
         methods: {
