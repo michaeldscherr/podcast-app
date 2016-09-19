@@ -8,7 +8,6 @@
 </template>
 
 <script>
-    import data from '../data';
     import LibraryContent from './Library/LibraryContent.vue';
     import LibraryNav from './Library/LibraryNav.vue';
 
@@ -16,12 +15,6 @@
         components: {
             LibraryNav,
             LibraryContent,
-        },
-        data() {
-            return Object.assign(
-                {},
-                data
-            );
         },
         ready() {
             //
