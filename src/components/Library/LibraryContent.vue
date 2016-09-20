@@ -2,7 +2,7 @@
     <div class="column">
         <h3 class="title" v-show="$root.activePodcast.name">
             {{ $root.activePodcast.name }}
-            <button class="button  is-danger">Unsubscribe</button>
+            <button class="button  is-danger" @click="unsubscribe($root.activePodcast)">Unsubscribe</button>
         </h3>
         <h4
             class="subtitle"
@@ -43,6 +43,10 @@
 
 <script>
     export default {
-        //
+        methods: {
+            unsubscribe(podcast) {
+                this.$dispatch('unsubscribe', podcast);
+            },
+        },
     };
 </script>

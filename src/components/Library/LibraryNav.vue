@@ -13,7 +13,7 @@
             </p>
             <ul class="menu-list">
                 <li v-for="podcast of $root.subscribedPodcasts" track-by="id">
-                    <a href="#">{{ podcast.name }}</a>
+                    <a href="#" @click="setActivePodcast(podcast)">{{ podcast.name }}</a>
                     <ul v-show="podcast.episodes.length">
                         <li v-for="episode of podcast.episodes">
                             <a href="#">{{ episode.title }}</a>
@@ -27,6 +27,10 @@
 
 <script>
     export default {
-        //
+        methods: {
+            setActivePodcast(podcast) {
+                this.$root.$set('activePodcast', podcast);
+            },
+        },
     };
 </script>
