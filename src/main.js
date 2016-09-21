@@ -51,6 +51,20 @@ new Vue({
                 episodes: [],
             };
         },
+        getEpisodeSkeleton(episode) {
+            return {
+                id: episode.id,
+                link: episode.link,
+                publishedDate: episode.publishedDate,
+                desc: episode.contentSnippet,
+                media: episode.mediaGroups[0].contents[0],
+            };
+        },
+        addEpisode(podcast, episode) {
+            // TODO: add check for duplicate episodes here
+            const newEpisode = this.getEpisodeSkeleton(episode);
+            podcast.episodes.push(newEpisode);
+        },
         fetchEpisodes(podcast) {
             if (podcast.episodes.length) {
                 return;
@@ -59,8 +73,8 @@ new Vue({
             const query = this.toQueryString(this.feedAPI.args);
             this.$http.jsonp(`${this.feedAPI.base}?${query}`).then((response) => {
                 const responseJSON = JSON.parse(response.body);
-                podcast.episodes = responseJSON.responseData.feed.entries;
-                // responseJSON.responseData.feed.entries.forEach((e) => podcast.episodes.push(e));
+                const episodes = responseJSON.responseData.feed.entries;
+                episodes.forEach(episode => this.addEpisode(podcast, episode));
             }, (response) => {
                 throw new Error(response);
             });
