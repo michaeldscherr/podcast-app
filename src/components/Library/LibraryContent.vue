@@ -43,6 +43,9 @@
 
 <script>
     export default {
+        ready() {
+            //
+        },
         methods: {
             unsubscribe(podcast) {
                 this.$dispatch('unsubscribe', podcast);

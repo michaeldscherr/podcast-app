@@ -13,7 +13,13 @@
             </p>
             <ul class="menu-list">
                 <li v-for="podcast of $root.subscribedPodcasts" track-by="id">
-                    <a href="#" @click="setActivePodcast(podcast)">{{ podcast.name }}</a>
+                    <a
+                        href="#"
+                        @click="setActivePodcast(podcast)"
+                        v-bind:class="{ 'is-active': podcast.id == $root.activePodcast.id }"
+                    >
+                        {{ podcast.name }}
+                    </a>
                     <ul v-show="podcast.episodes.length">
                         <li v-for="episode of podcast.episodes">
                             <a href="#">{{ episode.title }}</a>

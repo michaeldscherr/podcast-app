@@ -27,6 +27,7 @@ new Vue({
             this.subscribedPodcasts.push(newPodcast);
             this.activePodcast = newPodcast;
             this.$broadcast('subscribed', newPodcast);
+            this.fetchEpisodes(newPodcast);
         },
         unsubscribe(podcast) {
             if (!this.checkPodcastType(podcast)) {
@@ -50,11 +51,28 @@ new Vue({
                 episodes: [],
             };
         },
+        fetchEpisodes(podcast) {
+            if (podcast.episodes.length) {
+                return;
+            }
+            this.feedAPI.args.q = podcast.feed;
+            const query = this.toQueryString(this.feedAPI.args);
+            this.$http.jsonp(`${this.feedAPI.base}?${query}`).then((response) => {
+                const responseJSON = JSON.parse(response.body);
+                responseJSON.responseData.feed.entries.forEach(e => podcast.episodes.push(e));
+            }, (response) => {
+                throw new Error(response);
+            });
+        },
         checkPodcastType(podcast) {
             if (typeof podcast !== 'object') {
                 throw new Error('Podcast must be of type Object');
             }
             return true;
+        },
+        toQueryString(obj) {
+            return Object.keys(obj).map((k) => `${k}=${obj[k]}`)
+                .join('&');
         },
     },
 });
