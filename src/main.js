@@ -59,7 +59,8 @@ new Vue({
             const query = this.toQueryString(this.feedAPI.args);
             this.$http.jsonp(`${this.feedAPI.base}?${query}`).then((response) => {
                 const responseJSON = JSON.parse(response.body);
-                responseJSON.responseData.feed.entries.forEach(e => podcast.episodes.push(e));
+                podcast.episodes = responseJSON.responseData.feed.entries;
+                // responseJSON.responseData.feed.entries.forEach((e) => podcast.episodes.push(e));
             }, (response) => {
                 throw new Error(response);
             });

@@ -11,7 +11,7 @@
             no new episodes at this time. please try again later.
         </h4>
         <div class="columns  is-multiline">
-            <template v-for="episode of $root.activePodcast.episodes" track-by="id">
+            <template v-for="episode of $root.activePodcast.episodes" track-by="title">
                 <div class="column  is-one-third">
                     <div class="card">
                         <header class="card-header">
