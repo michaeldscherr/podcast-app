@@ -60,7 +60,7 @@ new Vue({
             };
         },
         getEpisodeSkeleton(episode) {
-            const newEpisode = {
+            return {
                 title: episode.title,
                 link: episode.link,
                 publishedDate: episode.pubDate,
@@ -69,10 +69,6 @@ new Vue({
                 explicit: episode.explicit,
                 media: episode.enclosure,
             };
-            if (episode.mediaGroups && episode.mediaGroups.length) {
-                newEpisode.media = episode.mediaGroups[0].contents[0];
-            }
-            return newEpisode;
         },
         addEpisode(podcast, episode) {
             // TODO: add check for duplicate episodes here
