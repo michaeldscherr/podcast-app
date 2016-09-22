@@ -106,7 +106,7 @@
                         { key: 'collectionName', label: 'Title' },
                         { key: 'primaryGenreName', label: 'Genre' },
                         { key: 'releaseDate', label: 'Release Date' },
-                        { key: 'feedUrl', label: 'Feed URL' },
+                        { key: 'feedUrl', label: 'Subscribe' },
                     ],
                     data: [],
                     errorMessage: '',

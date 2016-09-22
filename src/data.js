@@ -1,12 +1,19 @@
 export default {
     feedAPI: {
-        base: 'http://ajax.googleapis.com/ajax/services/feed/load',
+        base: 'https://query.yahooapis.com/v1/public/yql',
+        selectBase: 'select * from xml where url =',
         args: {
-            v: '1.0',
-            num: 1,
+            format: 'json',
+            env: 'store://datatables.org/alltableswithkeys',
             q: '',
         },
     },
     activePodcast: {},
     subscribedPodcasts: [],
 };
+
+/*
+https://developer.yahoo.com/yql/
+
+https://query.yahooapis.com/v1/public/yql?q=select * from xml where url = 'http://shoptalkshow.com/feed/podcast'&format=json&env=store://datatables.org/alltableswithkeys
+*/

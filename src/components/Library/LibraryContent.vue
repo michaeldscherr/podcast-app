@@ -11,7 +11,7 @@
             no new episodes at this time. please try again later.
         </h4>
         <div class="columns  is-multiline">
-            <template v-for="episode of $root.activePodcast.episodes" track-by="id">
+            <template v-for="episode of $root.activePodcast.episodes" track-by="title">
                 <div class="column  is-one-third">
                     <div class="card">
                         <header class="card-header">
@@ -21,11 +21,13 @@
                         </header>
                         <div class="card-content">
                             <div class="content">
-                                {{{ episode.contentSnippet }}}
+                                {{{ episode.desc | truncate 150 }}}
                                 <br>
                                 <small>
                                     Published
                                     {{ new Date(episode.publishedDate) | moment "from" }}
+                                    <br />
+                                    Duration: {{ episode.duration }}
                                 </small>
                             </div>
                         </div>

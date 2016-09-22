@@ -7,6 +7,14 @@ import store from './store';
 Vue.use(VueResource);
 Vue.use(VueMoment);
 
+Vue.filter('truncate', (str, length) => {
+    let returnString = str;
+    if (str.length > length) {
+        returnString = `${str.substring(0, length)}&#8230;`;
+    }
+    return returnString;
+});
+
 /* eslint-disable no-new */
 new Vue({
     el: 'body',
@@ -52,29 +60,35 @@ new Vue({
             };
         },
         getEpisodeSkeleton(episode) {
-            return {
-                id: episode.id,
+            const newEpisode = {
+                title: episode.title,
                 link: episode.link,
-                publishedDate: episode.publishedDate,
-                desc: episode.contentSnippet,
-                media: episode.mediaGroups[0].contents[0],
+                publishedDate: episode.pubDate,
+                desc: episode.summary,
+                duration: episode.duration,
+                explicit: episode.explicit,
+                media: episode.enclosure,
             };
+            if (episode.mediaGroups && episode.mediaGroups.length) {
+                newEpisode.media = episode.mediaGroups[0].contents[0];
+            }
+            return newEpisode;
         },
         addEpisode(podcast, episode) {
             // TODO: add check for duplicate episodes here
             const newEpisode = this.getEpisodeSkeleton(episode);
             podcast.episodes.push(newEpisode);
         },
-        fetchEpisodes(podcast) {
+        fetchEpisodes(podcast, count = 2) {
             if (podcast.episodes.length) {
                 return;
             }
-            this.feedAPI.args.q = podcast.feed;
+            this.feedAPI.args.q = `${this.feedAPI.selectBase} '${podcast.feed}'`;
             const query = this.toQueryString(this.feedAPI.args);
             this.$http.jsonp(`${this.feedAPI.base}?${query}`).then((response) => {
-                const responseJSON = JSON.parse(response.body);
-                const episodes = responseJSON.responseData.feed.entries;
-                episodes.forEach(episode => this.addEpisode(podcast, episode));
+                const episodes = response.data.query.results.rss.channel.item;
+                episodes.slice(0, count)
+                    .forEach((episode) => this.addEpisode(podcast, episode));
             }, (response) => {
                 throw new Error(response);
             });
