@@ -8,7 +8,7 @@
                         class="input"
                         type="text"
                         placeholder="{{ placeholder }}"
-                        v-model="query.params.term"
+                        v-model="searchTerm"
                         @keyup="search | debounce 250"
                     >
                 </p>
@@ -45,7 +45,7 @@
                 </tr>
             </tfoot>
             <tbody>
-                <tr v-for="row of results.data" track-by="collectionId">
+                <tr v-for="row of results.data">
                     <td width="50">
                         <img
                             v-bind:src="row.artworkUrl100"
@@ -85,19 +85,7 @@
     export default {
         data() {
             return {
-                query: {
-                    uri: 'https://itunes.apple.com/search',
-                    params: {
-                        entity: 'podcast',
-                        media: 'podcast',
-                        attribute: 'titleTerm',
-                        term: '',
-                        callback: '',
-                        limit: 10,
-                        explicit: 'Yes',
-                        lang: 'en_us',
-                    },
-                },
+                searchTerm: '',
                 title: 'Search',
                 placeholder: 'This American Life',
                 results: {
@@ -106,7 +94,7 @@
                         { key: 'collectionName', label: 'Title' },
                         { key: 'primaryGenreName', label: 'Genre' },
                         { key: 'releaseDate', label: 'Release Date' },
-                        { key: 'feedUrl', label: 'Subscribe' },
+                        { key: 'feedUrl', label: 'Feed URL' },
                     ],
                     data: [],
                     errorMessage: '',
@@ -115,17 +103,17 @@
         },
         methods: {
             search() {
-                this.$http.jsonp(this.query.uri, {
-                    params: this.query.params,
-                })
-                .then((response) => {
-                    if (response.data.results.length === 0) {
+                const args = Object.assign({}, this.$root.feedAPI.args);
+                args.q = `${this.$root.feedAPI.podcasts.select} '${this.searchTerm}'`;
+                const query = this.$root.toQueryString(args);
+                this.$http.jsonp(`${this.$root.feedAPI.base}?${query}`).then((response) => {
+                    if (!response || response.data.error || response.data.query.count === 0) {
                         this.$set('results.errorMessage', 'Sorry, no results found');
                         this.$set('results.data', []);
                         return;
                     }
                     this.$set('results.errorMessage', '');
-                    this.$set('results.data', response.data.results);
+                    this.$set('results.data', response.data.query.results.result.results || []);
                 }, () => {
                     this.$set('results.errorMessage', 'Sorry, no results found');
                 });
@@ -133,7 +121,7 @@
             clearSearch() {
                 this.$set('results.errorMessage', '');
                 this.$set('results.data', []);
-                this.$set('query.params.term', '');
+                this.$set('searchTerm', '');
             },
             subscribe(podcast) {
                 this.$dispatch('subscribe', podcast);

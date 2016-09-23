@@ -79,9 +79,14 @@ new Vue({
             if (podcast.episodes.length) {
                 return;
             }
-            this.feedAPI.args.q = `${this.feedAPI.selectBase} '${podcast.feed}'`;
-            const query = this.toQueryString(this.feedAPI.args);
+            const args = Object.assign({}, this.feedAPI.args);
+            args.q = `${this.feedAPI.episodes.select} '${podcast.feed}'`;
+            const query = this.toQueryString(args);
             this.$http.jsonp(`${this.feedAPI.base}?${query}`).then((response) => {
+                if (!response || response.data.error || response.data.query.count === 0) {
+                    // TODO: handle error here
+                    return;
+                }
                 const episodes = response.data.query.results.rss.channel.item;
                 episodes.slice(0, count)
                     .forEach((episode) => this.addEpisode(podcast, episode));
