@@ -68,12 +68,22 @@
                         {{ row.releaseDate | moment "MMM DD, YYYY" }}
                     </td>
                     <td class="is-icon">
-                        <a
-                            class="button  is-primary"
-                            @click="subscribe(row)"
-                        >
-                            Subscribe
-                        </a>
+                        <template v-if="$root.isAlreadySubscribed(row.collectionId)">
+                            <a
+                                class="button  is-danger"
+                                @click="unsubscribe(row)"
+                            >
+                                Unsubscribe
+                            </a>
+                        </template>
+                        <template v-else>
+                            <a
+                                class="button  is-primary"
+                                @click="subscribe(row)"
+                            >
+                                Subscribe
+                            </a>
+                        </template>
                     </td>
                 </tr>
             </tbody>
@@ -82,6 +92,8 @@
 </template>
 
 <script>
+    import helpers from '../helpers';
+
     export default {
         data() {
             return {
@@ -105,15 +117,19 @@
             search() {
                 const args = Object.assign({}, this.$root.feedAPI.args);
                 args.q = `${this.$root.feedAPI.podcasts.select} '${this.searchTerm}'`;
-                const query = this.$root.toQueryString(args);
+                const query = helpers.toQueryString(args);
                 this.$http.jsonp(`${this.$root.feedAPI.base}?${query}`).then((response) => {
                     if (!response || response.data.error || response.data.query.count === 0) {
                         this.$set('results.errorMessage', 'Sorry, no results found');
                         this.$set('results.data', []);
                         return;
                     }
+                    let results = response.data.query.results.result.results;
+                    if (results && !results.length) {
+                        results = [results];
+                    }
                     this.$set('results.errorMessage', '');
-                    this.$set('results.data', response.data.query.results.result.results || []);
+                    this.$set('results.data', results || []);
                 }, () => {
                     this.$set('results.errorMessage', 'Sorry, no results found');
                 });

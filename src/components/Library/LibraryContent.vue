@@ -4,20 +4,33 @@
             {{ $root.activePodcast.name }}
             <button class="button  is-danger" @click="unsubscribe($root.activePodcast)">Unsubscribe</button>
         </h3>
+        <template v-if="!$root.isSubscribed">
+            <h4 class="title">
+                No subscriptions found
+            </h4>
+            <h5 class="subtitle">
+                Use the search above to subscribe to a podcast to get started.
+            </h5>
+        </template>
         <h4
             class="subtitle"
-            v-if="!$root.activePodcast.episodes || !$root.activePodcast.episodes.length"
+            v-if="$root.isSubscribed && !$root.activeHasEpisodes"
         >
-            no new episodes at this time. please try again later.
+            No new episodes at this time. please try again later.
         </h4>
         <div class="columns  is-multiline">
             <template v-for="episode of $root.activePodcast.episodes" track-by="title">
-                <div class="column  is-one-third">
-                    <div class="card">
+                <div class="column  is-half-desktop">
+                    <div class="card  is-fullwidth">
                         <header class="card-header">
                             <p class="card-header-title">
                                 {{ episode.title }}
                             </p>
+                            <template v-if="episode.explicit === 'yes'">
+                                <span class="card-header-icon  is-disabled">
+                                    <i class="fa  fa-exclamation-circle"></i>
+                                </span>
+                            </template>
                         </header>
                         <div class="card-content">
                             <div class="content">
@@ -40,8 +53,9 @@
                             </a>
                             <a
                                 class="card-footer-item"
+                                @click="removeEpisode(episode)"
                             >
-                                Delete
+                                Remove
                             </a>
                             <a
                                 class="card-footer-item"
@@ -63,12 +77,12 @@
 
 <script>
     export default {
-        ready() {
-            //
-        },
         methods: {
             unsubscribe(podcast) {
                 this.$dispatch('unsubscribe', podcast);
+            },
+            removeEpisode(episode) {
+                this.$dispatch('removeEpisode', episode);
             },
         },
     };
