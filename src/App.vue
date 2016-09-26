@@ -3,6 +3,7 @@
         <hero></hero>
         <search-bar></search-bar>
         <library></library>
+        <main-footer></main-footer>
     </div>
 </template>
 
@@ -12,12 +13,14 @@
     import Hero from './components/Hero.vue';
     import SearchBar from './components/SearchBar.vue';
     import Library from './components/Library.vue';
+    import MainFooter from './components/MainFooter.vue';
 
     export default {
         components: {
             Hero,
             SearchBar,
             Library,
+            MainFooter,
         },
     };
 </script>
