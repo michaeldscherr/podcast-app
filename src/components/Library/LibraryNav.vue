@@ -15,7 +15,7 @@
                 <li v-for="podcast of $root.subscribedPodcasts" track-by="id">
                     <a
                         href="#"
-                        @click="setActivePodcast(podcast)"
+                        @click.prevent="setActivePodcast(podcast)"
                         v-bind:class="{ 'is-active': podcast.id == $root.activePodcast.id }"
                     >
                         {{ podcast.name }}

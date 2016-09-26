@@ -2,7 +2,12 @@
     <div class="column">
         <h3 class="title" v-show="$root.activePodcast.name">
             {{ $root.activePodcast.name }}
-            <button class="button  is-danger" @click="unsubscribe($root.activePodcast)">Unsubscribe</button>
+            <button
+                class="button  is-danger"
+                @click.prevent="unsubscribe($root.activePodcast)"
+            >
+                Unsubscribe
+            </button>
         </h3>
         <template v-if="!$root.isSubscribed">
             <h4 class="title">
@@ -47,13 +52,13 @@
                         <footer class="card-footer">
                             <a
                                 class="card-footer-item"
-                                @click="stream(episode)"
+                                @click.prevent="stream(episode)"
                             >
                                 Play
                             </a>
                             <a
                                 class="card-footer-item"
-                                @click="removeEpisode(episode)"
+                                @click.prevent="removeEpisode(episode)"
                             >
                                 Remove
                             </a>

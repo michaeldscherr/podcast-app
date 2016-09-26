@@ -15,13 +15,13 @@
                 <p class="control">
                     <a
                         class="button is-primary"
-                        @click="search"
+                        @click.prevent="search"
                     >
                         {{ title }}
                     </a>
                     <a
                         class="button is-info"
-                        @click="clearSearch"
+                        @click.prevent="clearSearch"
                     >
                         Clear Search
                     </a>
@@ -71,7 +71,7 @@
                         <template v-if="$root.isAlreadySubscribed(row.collectionId)">
                             <a
                                 class="button  is-danger"
-                                @click="unsubscribe(row)"
+                                @click.prevent="unsubscribe(row)"
                             >
                                 Unsubscribe
                             </a>
@@ -79,7 +79,7 @@
                         <template v-else>
                             <a
                                 class="button  is-primary"
-                                @click="subscribe(row)"
+                                @click.prevent="subscribe(row)"
                             >
                                 Subscribe
                             </a>
@@ -118,8 +118,15 @@
                 const args = Object.assign({}, this.$root.feedAPI.args);
                 args.q = `${this.$root.feedAPI.podcasts.select} '${this.searchTerm}'`;
                 const query = helpers.toQueryString(args);
-                this.$http.jsonp(`${this.$root.feedAPI.base}?${query}`).then((response) => {
-                    if (!response || response.data.error || response.data.query.count === 0) {
+                this.$http.get(`${this.$root.feedAPI.base}?${query}`, {
+                    timeout: 1000,
+                    before() {
+                        if (this.previousRequest) {
+                            this.previousRequest.abort();
+                        }
+                    },
+                }).then((response) => {
+                    if (!response.ok || response.data.query.count === 0) {
                         this.$set('results.errorMessage', 'Sorry, no results found');
                         this.$set('results.data', []);
                         return;
@@ -131,7 +138,7 @@
                     this.$set('results.errorMessage', '');
                     this.$set('results.data', results || []);
                 }, () => {
-                    this.$set('results.errorMessage', 'Sorry, no results found');
+                    this.$set('results.errorMessage', 'Sorry, there was an error. Please try again.');
                 });
             },
             clearSearch() {

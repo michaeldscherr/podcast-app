@@ -9,6 +9,9 @@ Vue.use(VueResource);
 Vue.use(VueMoment);
 
 Vue.filter('truncate', (str, length) => {
+    if (!str) {
+        return str;
+    }
     let returnString = str;
     if (str.length > length) {
         returnString = `${str.substring(0, length)}&#8230;`;
@@ -84,9 +87,15 @@ new Vue({
             const args = Object.assign({}, this.feedAPI.args);
             args.q = `${this.feedAPI.episodes.select} '${podcast.feed}'`;
             const query = helpers.toQueryString(args);
-            this.$http.jsonp(`${this.feedAPI.base}?${query}`).then((response) => {
-                if (!response || response.data.error || response.data.query.count === 0) {
-                    // TODO: handle error here
+            this.$http.get(`${this.feedAPI.base}?${query}`, {
+                timeout: 1000,
+                before() {
+                    if (this.previousRequest) {
+                        this.previousRequest.abort();
+                    }
+                },
+            }).then((response) => {
+                if (!response.ok || response.data.query.count === 0) {
                     return;
                 }
                 const episodes = response.data.query.results.rss.channel.item;
