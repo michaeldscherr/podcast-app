@@ -40,12 +40,15 @@
 <script>
     export default {
         methods: {
-            setActivePodcast(podcast) {
+            setActivePodcast(podcast, setActiveEpisode = true) {
                 this.$root.$set('activePodcast', podcast);
+                if (setActiveEpisode) {
+                    this.$root.$set('activeEpisode', podcast.episodes[0]);
+                }
             },
             setActiveEpisode(episode, podcast) {
                 this.$root.$set('activeEpisode', episode);
-                this.setActivePodcast(podcast);
+                this.setActivePodcast(podcast, false);
             },
         },
     };
