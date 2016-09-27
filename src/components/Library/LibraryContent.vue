@@ -52,7 +52,7 @@
                         <footer class="card-footer">
                             <a
                                 class="card-footer-item"
-                                @click.prevent="stream(episode)"
+                                @click.prevent="setActiveEpisode(episode)"
                             >
                                 Play
                             </a>
@@ -88,6 +88,9 @@
             },
             removeEpisode(episode) {
                 this.$dispatch('removeEpisode', episode);
+            },
+            setActiveEpisode(episode) {
+                this.$root.$set('activeEpisode', episode);
             },
         },
     };

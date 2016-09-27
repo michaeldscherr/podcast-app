@@ -43,6 +43,9 @@ new Vue({
                 this.activePodcast.episodes.length > 0
             );
         },
+        hasActiveEpisode() {
+            return Object.keys(this.activeEpisode).length > 0;
+        },
     },
     events: {
         subscribe(podcast) {
@@ -72,6 +75,9 @@ new Vue({
         removeEpisode(episode, podcast = this.activePodcast) {
             podcast.episodes.$remove(episode);
             this.$broadcast('removeEpisode', episode);
+        },
+        setActiveEpisode(episode) {
+            this.activeEpisode = episode;
         },
     },
     methods: {

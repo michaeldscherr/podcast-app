@@ -4,6 +4,7 @@ export default {
             id: podcast.collectionId,
             name: podcast.collectionName,
             feed: podcast.feedUrl,
+            artwork: podcast.artworkUrl100,
             episodes: [],
         };
     },

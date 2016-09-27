@@ -13,6 +13,7 @@ export default {
             select: 'select * from xml where url=',
         },
     },
+    activeEpisode: {},
     activePodcast: {},
     subscribedPodcasts: [],
 };

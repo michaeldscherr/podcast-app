@@ -22,7 +22,13 @@
                     </a>
                     <ul v-show="podcast.episodes.length">
                         <li v-for="episode of podcast.episodes">
-                            <a href="#">{{ episode.title }}</a>
+                            <a
+                                v-bind:class="{ 'is-active': episode.title === $root.activeEpisode.title }"
+                                @click.prevent="setActiveEpisode(episode, podcast)"
+                                href="#"
+                            >
+                                {{ episode.title }}
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -36,6 +42,10 @@
         methods: {
             setActivePodcast(podcast) {
                 this.$root.$set('activePodcast', podcast);
+            },
+            setActiveEpisode(episode, podcast) {
+                this.$root.$set('activeEpisode', episode);
+                this.setActivePodcast(podcast);
             },
         },
     };
