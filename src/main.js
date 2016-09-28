@@ -19,6 +19,8 @@ Vue.filter('truncate', (str, length) => {
     return returnString.trim();
 });
 
+Vue.filter('trim', (str) => str.trim());
+
 /* eslint-disable no-new */
 new Vue({
     el: 'body',

@@ -39,7 +39,7 @@
                         </header>
                         <div class="card-content">
                             <div class="content">
-                                {{{ episode.desc | truncate 150 }}}
+                                {{{ episode.desc | trim | truncate 150 }}}
                                 <br>
                                 <small>
                                     Published

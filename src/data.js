@@ -16,4 +16,5 @@ export default {
     activeEpisode: {},
     activePodcast: {},
     subscribedPodcasts: [],
+    audio: {},
 };
