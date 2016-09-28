@@ -4,6 +4,15 @@
         v-if="$root.hasActiveEpisode"
     >
         <h3 class="title">Currently Playing: {{ $root.activePodcast.name }}</h3>
+        <audio
+            v-el:audioPlayer
+            preload="auto"
+        >
+            <source
+                v-bind:src="$root.activeEpisode.media.url"
+                v-bind:type="$root.activeEpisode.media.type"
+            >
+        </audio>
         <div class="columns">
             <div class="column  is-half-desktop">
                 <div class="box">
@@ -88,13 +97,15 @@
                                 Volume
                             </p>
                             <p class="title">
-                                {{ volume }}<br />
+                                {{ volume * 100 }}<br />
                                 <input
+                                    @change="updateVolume()",
+                                    @input="updateVolume()"
                                     v-model="volume"
                                     type="range"
                                     min="0"
-                                    max="100"
-                                    step="1"
+                                    max="1"
+                                    step="0.1"
                                 />
                             </p>
                         </div>
@@ -105,6 +116,8 @@
                             <p class="title">
                                 {{ playback }}<br />
                                 <input
+                                    @change="updatePlayback()",
+                                    @input="updatePlayback()"
                                     v-model="playback"
                                     type="range"
                                     min="1"
@@ -126,16 +139,32 @@
             return {
                 isPaused: true,
                 isMuted: false,
-                volume: 100,
+                volume: 1,
                 playback: 1,
             };
         },
         methods: {
+            updatePlayback() {
+                this.$els.audioplayer.playbackRate = this.playback;
+            },
+            updateVolume() {
+                this.$els.audioplayer.volume = this.volume;
+            },
             togglePaused() {
                 this.isPaused = !this.isPaused;
+                if (this.isPaused) {
+                    this.$els.audioplayer.pause();
+                    return;
+                }
+                this.$els.audioplayer.play();
             },
             toggleMuted() {
                 this.isMuted = !this.isMuted;
+                if (this.isMuted) {
+                    this.$els.audioplayer.volume = 0;
+                    return;
+                }
+                this.$els.audioplayer.volume = this.volume;
             },
         },
     };
