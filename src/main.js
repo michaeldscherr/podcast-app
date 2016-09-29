@@ -78,8 +78,13 @@ new Vue({
             podcast.episodes.$remove(episode);
             this.$broadcast('removeEpisode', episode);
         },
+        setActivePodcast(podcast) {
+            this.activePodcast = podcast;
+            this.$broadcast('setActivePodcast', podcast);
+        },
         setActiveEpisode(episode) {
             this.activeEpisode = episode;
+            this.$broadcast('setActiveEpisode', episode);
         },
     },
     methods: {

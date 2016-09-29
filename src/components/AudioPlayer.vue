@@ -4,15 +4,6 @@
         v-if="$root.hasActiveEpisode"
     >
         <h3 class="title">Currently Playing: {{ $root.activePodcast.name }}</h3>
-        <audio
-            v-el:audioPlayer
-            preload="auto"
-        >
-            <source
-                v-bind:src="$root.activeEpisode.media.url"
-                v-bind:type="$root.activeEpisode.media.type"
-            >
-        </audio>
         <div class="columns">
             <div class="column  is-half-desktop">
                 <div class="box">
@@ -39,6 +30,21 @@
             </div>
             <div class="column  is-half-desktop">
                 <div class="box">
+                    <nav class="level">
+                        <div class="level-item  has-text-centered">
+                            <audio
+                                controls
+                                @timeupdate="updateCurrentTime"
+                                v-el:audioPlayer
+                                preload="auto"
+                            >
+                                <source
+                                    v-bind:src="$root.activeEpisode.media.url"
+                                    v-bind:type="$root.activeEpisode.media.type"
+                                >
+                            </audio>
+                        </div>
+                    </nav>
                     <nav class="level">
                         <div class="level-item  has-text-centered">
                             <p class="heading">
@@ -74,7 +80,7 @@
                                 Current Time
                             </p>
                             <p class="title">
-                                50s
+                                {{ currentTime | currentTime }}
                             </p>
                         </div>
                         <div class="level-item  has-text-centered">
@@ -87,7 +93,7 @@
                                 Total Time
                             </p>
                             <p class="title">
-                                1h 30s
+                                {{ totalTime }}
                             </p>
                         </div>
                     </nav>
@@ -133,7 +139,20 @@
     </section>
 </template>
 
+<style scope="local" lang="scss">
+    nav.level {
+        .title {
+            font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+        }
+    }
+    audio {
+        width: 100%;
+    }
+</style>
+
 <script>
+    import Vue from 'vue';
+
     export default {
         data() {
             return {
@@ -141,14 +160,54 @@
                 isMuted: false,
                 volume: 1,
                 playback: 1,
+                totalTime: 0,
+                currentTime: 0,
+                progress: 0,
             };
         },
+        ready() {
+            if (this.$root.activeEpisode) {
+                this.setTotalTime();
+            }
+        },
+        filters: {
+            currentTime(seconds) {
+                seconds %= 3600;
+                const format = Vue.moment({
+                    hours: Math.floor(seconds / 3600),
+                    minutes: Math.floor(seconds / 60),
+                    seconds: (seconds % 60),
+                })
+                .format('HH:mm:ss');
+                return format;
+            },
+        },
+        events: {
+            setActiveEpisode() {
+                this.setTotalTime();
+                this.$set('currentTime', 0);
+            },
+        },
         methods: {
+            setProgress() {
+                const { currentTime, duration } = this.$els.audioplayer;
+                this.progress = ((currentTime / duration) * 100).toFixed(2);
+            },
+            setTotalTime() {
+                this.totalTime = this.$root.activeEpisode.duration;
+            },
+            updateCurrentTime() {
+                this.currentTime = Math.floor(this.$els.audioplayer.currentTime);
+                this.setProgress();
+            },
             updatePlayback() {
                 this.$els.audioplayer.playbackRate = this.playback;
             },
             updateVolume() {
                 this.$els.audioplayer.volume = this.volume;
+            },
+            updateTime() {
+                this.totalTime = this.$els.audioplayer.currentTime;
             },
             togglePaused() {
                 this.isPaused = !this.isPaused;

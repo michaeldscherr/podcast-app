@@ -41,13 +41,13 @@
     export default {
         methods: {
             setActivePodcast(podcast, setActiveEpisode = true) {
-                this.$root.$set('activePodcast', podcast);
+                this.$dispatch('setActivePodcast', podcast);
                 if (setActiveEpisode) {
-                    this.$root.$set('activeEpisode', podcast.episodes[0]);
+                    this.$dispatch('setActiveEpisode', podcast.episodes[0]);
                 }
             },
             setActiveEpisode(episode, podcast) {
-                this.$root.$set('activeEpisode', episode);
+                this.$dispatch('setActiveEpisode', episode);
                 this.setActivePodcast(podcast, false);
             },
         },

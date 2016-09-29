@@ -90,7 +90,7 @@
                 this.$dispatch('removeEpisode', episode);
             },
             setActiveEpisode(episode) {
-                this.$root.$set('activeEpisode', episode);
+                this.$dispatch('setActiveEpisode', episode);
             },
         },
     };
