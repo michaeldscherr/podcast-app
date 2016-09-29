@@ -36,7 +36,7 @@
                                 controls
                                 @timeupdate="updateCurrentTime"
                                 v-el:audioPlayer
-                                preload="auto"
+                                preload="metadata"
                             >
                                 <source
                                     v-bind:src="$root.activeEpisode.media.url"
@@ -46,75 +46,6 @@
                         </div>
                     </nav>
                     <nav class="level">
-                        <div class="level-item  has-text-centered">
-                            <p class="heading">
-                                Controls
-                            </p>
-                            <p class="title">
-                                <span
-                                    @click="togglePaused()"
-                                    class="icon is-medium">
-                                    <i
-                                        class="fa"
-                                        v-bind:class="{
-                                            'fa-play': isPaused,
-                                            'fa-pause': !isPaused
-                                        }"
-                                    ></i>
-                                </span>
-                                <span
-                                    @click="toggleMuted()"
-                                    class="icon is-medium">
-                                    <i
-                                        class="fa"
-                                        v-bind:class="{
-                                            'fa-volume-up': !isMuted,
-                                            'fa-volume-off': isMuted
-                                        }"
-                                    ></i>
-                                </span>
-                            </p>
-                        </div>
-                        <div class="level-item  has-text-centered">
-                            <p class="heading">
-                                Current Time
-                            </p>
-                            <p class="title">
-                                {{ currentTime | currentTime }}
-                            </p>
-                        </div>
-                        <div class="level-item  has-text-centered">
-                            <p class="title">
-                                /
-                            </p>
-                        </div>
-                        <div class="level-item  has-text-centered">
-                            <p class="heading">
-                                Total Time
-                            </p>
-                            <p class="title">
-                                {{ totalTime }}
-                            </p>
-                        </div>
-                    </nav>
-                    <nav class="level">
-                        <div class="level-item  has-text-centered">
-                            <p class="heading">
-                                Volume
-                            </p>
-                            <p class="title">
-                                {{ volume * 100 }}<br />
-                                <input
-                                    @change="updateVolume()",
-                                    @input="updateVolume()"
-                                    v-model="volume"
-                                    type="range"
-                                    min="0"
-                                    max="1"
-                                    step="0.1"
-                                />
-                            </p>
-                        </div>
                         <div class="level-item  has-text-centered">
                             <p class="heading">
                                 Playback
@@ -156,13 +87,7 @@
     export default {
         data() {
             return {
-                isPaused: true,
-                isMuted: false,
-                volume: 1,
                 playback: 1,
-                totalTime: 0,
-                currentTime: 0,
-                progress: 0,
             };
         },
         ready() {
@@ -184,46 +109,12 @@
         },
         events: {
             setActiveEpisode() {
-                this.setTotalTime();
-                this.$set('currentTime', 0);
+                this.$els.audioplayer.load();
             },
         },
         methods: {
-            setProgress() {
-                const { currentTime, duration } = this.$els.audioplayer;
-                this.progress = ((currentTime / duration) * 100).toFixed(2);
-            },
-            setTotalTime() {
-                this.totalTime = this.$root.activeEpisode.duration;
-            },
-            updateCurrentTime() {
-                this.currentTime = Math.floor(this.$els.audioplayer.currentTime);
-                this.setProgress();
-            },
             updatePlayback() {
                 this.$els.audioplayer.playbackRate = this.playback;
-            },
-            updateVolume() {
-                this.$els.audioplayer.volume = this.volume;
-            },
-            updateTime() {
-                this.totalTime = this.$els.audioplayer.currentTime;
-            },
-            togglePaused() {
-                this.isPaused = !this.isPaused;
-                if (this.isPaused) {
-                    this.$els.audioplayer.pause();
-                    return;
-                }
-                this.$els.audioplayer.play();
-            },
-            toggleMuted() {
-                this.isMuted = !this.isMuted;
-                if (this.isMuted) {
-                    this.$els.audioplayer.volume = 0;
-                    return;
-                }
-                this.$els.audioplayer.volume = this.volume;
             },
         },
     };
