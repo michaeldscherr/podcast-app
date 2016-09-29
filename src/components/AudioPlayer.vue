@@ -34,7 +34,6 @@
                         <div class="level-item  has-text-centered">
                             <audio
                                 controls
-                                @timeupdate="updateCurrentTime"
                                 v-el:audioPlayer
                                 preload="metadata"
                             >
@@ -89,11 +88,6 @@
             return {
                 playback: 1,
             };
-        },
-        ready() {
-            if (this.$root.activeEpisode) {
-                this.setTotalTime();
-            }
         },
         filters: {
             currentTime(seconds) {
