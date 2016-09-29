@@ -89,18 +89,6 @@
                 playback: 1,
             };
         },
-        filters: {
-            currentTime(seconds) {
-                seconds %= 3600;
-                const format = Vue.moment({
-                    hours: Math.floor(seconds / 3600),
-                    minutes: Math.floor(seconds / 60),
-                    seconds: (seconds % 60),
-                })
-                .format('HH:mm:ss');
-                return format;
-            },
-        },
         events: {
             setActiveEpisode() {
                 this.$els.audioplayer.load();
